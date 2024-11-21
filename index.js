@@ -67,7 +67,7 @@ function createNickname(object) {
     .split("")
     .reverse()
     .join("");
-  let nickname = lastNameChars + firstNameChars;
+  let nickname = firstNameChars + lastNameChars;
   nickname = nickname.charAt(0).toUpperCase() + nickname.slice(1);
   return nickname;
 }
