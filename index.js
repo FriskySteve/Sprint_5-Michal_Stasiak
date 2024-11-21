@@ -26,13 +26,6 @@ const entryTable = [
   },
 ];
 
-// Stwórz funkcję, która przetworzy tablicę osób z pierwszego zadania (Należy wykorzystać wynik wywołania funkcji z pierwszego zadania), zwracając tylko osoby, które mają przypisany pseudonim oraz dodając nowe pole age do każdej osoby.
-// Filtruj tablicę, aby zawierała tylko osoby z pseudonimem.
-// Oblicz liczbę liter w imieniu i nazwisku każdej osoby.
-// Jeśli suma liter jest parzysta, przypisz ją jako age. Jeśli nieparzysta, age oblicz jako sumę liter w kluczach firstName , lastName i nickname pobieranych dynamicznie podzieloną przez indeks osoby w tablicy ( jeżeli index wynosi 0 zastąp go 1 ). Użyj odpowiedniej metody do wyciagnięcia kluczy z obiektu oraz reduce w notacji łańcuchowej do zliczenia liter w kluczach.
-// Dodaj pole age do każdego obiektu osoby.
-// Zadbaj o to by wiek był zaokrąglony w górę (odszukaj potrzebnej informacji w internecie).
-
 function addNickname(table) {
   table.forEach((person) => {
     let firstNameChars = person.firstName;
@@ -72,16 +65,6 @@ function createNickname(object) {
   return nickname;
 }
 
-// Stwórz funkcję, która przetworzy tablicę osób z pierwszego zadania (Należy wykorzystać wynik wywołania funkcji z pierwszego zadania), zwracając tylko osoby, które mają przypisany pseudonim oraz dodając nowe pole age do każdej osoby.
-// Filtruj tablicę, aby zawierała tylko osoby z pseudonimem.
-// Oblicz liczbę liter w imieniu i nazwisku każdej osoby.
-// Jeśli suma liter jest parzysta, przypisz ją jako age. Jeśli nieparzysta, age oblicz jako sumę liter w kluczach firstName , lastName i nickname pobieranych dynamicznie podzieloną przez indeks osoby w tablicy ( jeżeli index wynosi 0 zastąp go 1 ). Użyj odpowiedniej metody do wyciagnięcia kluczy z obiektu oraz reduce w notacji łańcuchowej do zliczenia liter w kluczach.
-// Dodaj pole age do każdego obiektu osoby.
-// Zadbaj o to by wiek był zaokrąglony w górę (odszukaj potrzebnej informacji w internecie).
-
-addNickname(entryTable);
-const peopleWithNickame = entryTable.filter((people) => people.nickname);
-
 function getAge(person, table) {
   let age = 0;
   let index = table.indexOf(person);
@@ -99,11 +82,11 @@ function getAge(person, table) {
   return age;
 }
 
-function addAge(table) {
-  table.forEach((person) => {
-    person.age = getAge(person, table);
+function addAge() {
+  addNickname(entryTable);
+  const peopleWithNickame = entryTable.filter((people) => people.nickname);
+  peopleWithNickame.forEach((person) => {
+    person.age = getAge(person, peopleWithNickame);
   });
-  return table;
+  return peopleWithNickame;
 }
-
-console.log(addAge(peopleWithNickame));
