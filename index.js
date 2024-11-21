@@ -25,12 +25,13 @@ const entryTable = [
     lastName: null,
   },
 ];
-// Napisz funkcję przetwarzającą tablicę obiektów osób. Funkcja powinna generować pseudonim na podstawie określonych zasad i dodawać go do każdego obiektu osoby, gdy jest to możliwe. Nie nadpisuj danych wejściowych.
-// Pobierz trzy ostatnie trzy litery imienia, odwróć ich kolejność i zapisz wynik
-// Weź pierwsze trzy litery nazwiska, odwróć ich kolejność i dodaj to do wyniku z poprzedniego punktu
-// Sformatuj połączony wynik tak, aby pseudonim zaczynał się od wielkiej litery, a reszta liter była mała.
-// Dodaj ten pseudonim jako nową właściwość do obiektu osoby.
-// Jeśli firstName lub lastName ma mniej niż trzy znaki (pomiń znaki białe) lub nie jest typu string, nie dodawaj właściwości pseudonimu dla tej osoby.
+
+// Stwórz funkcję, która przetworzy tablicę osób z pierwszego zadania (Należy wykorzystać wynik wywołania funkcji z pierwszego zadania), zwracając tylko osoby, które mają przypisany pseudonim oraz dodając nowe pole age do każdej osoby.
+// Filtruj tablicę, aby zawierała tylko osoby z pseudonimem.
+// Oblicz liczbę liter w imieniu i nazwisku każdej osoby.
+// Jeśli suma liter jest parzysta, przypisz ją jako age. Jeśli nieparzysta, age oblicz jako sumę liter w kluczach firstName , lastName i nickname pobieranych dynamicznie podzieloną przez indeks osoby w tablicy ( jeżeli index wynosi 0 zastąp go 1 ). Użyj odpowiedniej metody do wyciagnięcia kluczy z obiektu oraz reduce w notacji łańcuchowej do zliczenia liter w kluczach.
+// Dodaj pole age do każdego obiektu osoby.
+// Zadbaj o to by wiek był zaokrąglony w górę (odszukaj potrzebnej informacji w internecie).
 
 function addNickname(table) {
   table.forEach((person) => {
@@ -41,7 +42,6 @@ function addNickname(table) {
     if (firstNameChars.trim().length < 3 || lastNameChars.trim().length < 3)
       return;
     person.nickname = createNickname(person);
-    // console.log(createNickname(person));
   });
 }
 
@@ -72,7 +72,38 @@ function createNickname(object) {
   return nickname;
 }
 
+// Stwórz funkcję, która przetworzy tablicę osób z pierwszego zadania (Należy wykorzystać wynik wywołania funkcji z pierwszego zadania), zwracając tylko osoby, które mają przypisany pseudonim oraz dodając nowe pole age do każdej osoby.
+// Filtruj tablicę, aby zawierała tylko osoby z pseudonimem.
+// Oblicz liczbę liter w imieniu i nazwisku każdej osoby.
+// Jeśli suma liter jest parzysta, przypisz ją jako age. Jeśli nieparzysta, age oblicz jako sumę liter w kluczach firstName , lastName i nickname pobieranych dynamicznie podzieloną przez indeks osoby w tablicy ( jeżeli index wynosi 0 zastąp go 1 ). Użyj odpowiedniej metody do wyciagnięcia kluczy z obiektu oraz reduce w notacji łańcuchowej do zliczenia liter w kluczach.
+// Dodaj pole age do każdego obiektu osoby.
+// Zadbaj o to by wiek był zaokrąglony w górę (odszukaj potrzebnej informacji w internecie).
+
 addNickname(entryTable);
-console.log(entryTable);
-// console.log(createNickname(entryTable[1]));
-// console.log(entryTable[1]);
+const peopleWithNickame = entryTable.filter((people) => people.nickname);
+
+function getAge(person, table) {
+  let age = 0;
+  let index = table.indexOf(person);
+  const firstNameAndLastNameSumChar =
+    person.firstName.length + person.lastName.length;
+  if (firstNameAndLastNameSumChar % 2 === 0) {
+    age = firstNameAndLastNameSumChar;
+  } else {
+    if (index === 0) index = 1;
+    age =
+      Object.keys(person).reduce((acc, curr) => {
+        return acc + curr.length;
+      }, 0) / index;
+  }
+  return age;
+}
+
+function addAge(table) {
+  table.forEach((person) => {
+    person.age = getAge(person, table);
+  });
+  return table;
+}
+
+console.log(addAge(peopleWithNickame));
