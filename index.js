@@ -33,16 +33,35 @@ const entryTable = [
 // Jeśli firstName lub lastName ma mniej niż trzy znaki (pomiń znaki białe) lub nie jest typu string, nie dodawaj właściwości pseudonimu dla tej osoby.
 
 function addNickname(table) {
-  table.forEach((person) => {});
+  table.forEach((person) => {
+    let firstNameChars = person.firstName;
+    let lastNameChars = person.lastName;
+    if (typeof firstNameChars !== "string" || typeof lastNameChars !== "string")
+      return;
+    if (firstNameChars.trim().length < 3 || lastNameChars.trim().length < 3)
+      return;
+    person.nickname = createNickname(person);
+    // console.log(createNickname(person));
+  });
 }
 
 function createNickname(object) {
-  const firstNameChars = object.firstName
+  let firstNameChars = object.firstName;
+  let lastNameChars = object.lastName;
+  if (
+    firstNameChars.trim().length < 3 &&
+    typeof firstNameChars !== "string" &&
+    lastNameChars.trim().length < 3 &&
+    typeof lastNameChars !== "string"
+  )
+    return;
+  firstNameChars = firstNameChars
     .slice(-3)
     .split("")
     .reverse()
-    .join("");
-  const lastNameChars = object.lastName
+    .join("")
+    .toLowerCase();
+  lastNameChars = lastNameChars
     .slice(0, 3)
     .toLowerCase()
     .split("")
@@ -53,4 +72,7 @@ function createNickname(object) {
   return nickname;
 }
 
-console.log(getChars(entryTable[1]));
+addNickname(entryTable);
+console.log(entryTable);
+// console.log(createNickname(entryTable[1]));
+// console.log(entryTable[1]);
