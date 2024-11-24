@@ -26,48 +26,42 @@ const entryTable = [
   },
 ];
 
-function addNickname(table) {
-  table.forEach((person) => {
-    let firstNameChars = person.firstName;
-    let lastNameChars = person.lastName;
+function addNickname(people) {
+  const peopleWithNicknames = people.map((person) => {
+    const firstNameChars = person.firstName;
+    const lastNameChars = person.lastName;
     if (typeof firstNameChars !== "string" || typeof lastNameChars !== "string")
-      return;
+      return { ...person };
     if (firstNameChars.trim().length < 3 || lastNameChars.trim().length < 3)
-      return;
-    person.nickname = createNickname(person);
+      return { ...person };
+    const newPerson = { ...person };
+    newPerson.nickname = createNickname(person);
+    return newPerson;
   });
+  return peopleWithNicknames;
 }
 
-function createNickname(object) {
-  let firstNameChars = object.firstName;
-  let lastNameChars = object.lastName;
-  if (
-    firstNameChars.trim().length < 3 &&
-    typeof firstNameChars !== "string" &&
-    lastNameChars.trim().length < 3 &&
-    typeof lastNameChars !== "string"
-  )
-    return;
-  firstNameChars = firstNameChars
+function createNickname(person) {
+  const firstNameChars = person.firstName
     .slice(-3)
     .split("")
     .reverse()
     .join("")
     .toLowerCase();
-  lastNameChars = lastNameChars
+  const lastNameChars = person.lastName
     .slice(0, 3)
     .toLowerCase()
     .split("")
     .reverse()
     .join("");
-  let nickname = firstNameChars + lastNameChars;
-  nickname = nickname.charAt(0).toUpperCase() + nickname.slice(1);
-  return nickname;
+
+  const nickname = firstNameChars + lastNameChars;
+  return nickname.charAt(0).toUpperCase() + nickname.slice(1);
 }
 
-function getAge(person, table) {
+function getAge(person, people) {
   let age = 0;
-  let index = table.indexOf(person);
+  let index = people.indexOf(person);
   const firstNameAndLastNameSumChar =
     person.firstName.length + person.lastName.length;
   if (firstNameAndLastNameSumChar % 2 === 0) {
@@ -82,18 +76,19 @@ function getAge(person, table) {
   return age;
 }
 
-function addAge() {
-  addNickname(entryTable);
-  const peopleWithNickame = entryTable.filter((people) => people.nickname);
-  peopleWithNickame.forEach((person) => {
+function addAge(people) {
+  const peopleWithNickame = addNickname(people).filter(
+    (person) => person.nickname
+  );
+  peopleWithNickame.map((person) => {
     person.age = getAge(person, peopleWithNickame);
   });
   return peopleWithNickame;
 }
 
 function mostCommonChar(string) {
-  let counter = {};
-  let chars = string.toLowerCase().split("");
+  const counter = {};
+  const chars = string.toLowerCase().split("");
   chars.forEach((char) => {
     counter[char] = (counter[char] || 0) + 1;
   });
@@ -111,18 +106,15 @@ function mostCommonChar(string) {
       }
     }
   }
-  console.log(counter);
   return { letter: mostCommonLetter, count: count };
 }
 
-function addMostCommonLetter() {
-  const tableToModify = addAge().map((key) => {
-    const allChars = key.firstName + key.lastName + key.nickname;
+function addMostCommonLetter(people) {
+  const peopleWithMostCommonLetter = addAge(people).map((person) => {
+    const allChars = person.firstName + person.lastName + person.nickname;
     const mostCommonLetter = mostCommonChar(allChars);
-    key.mostCommonLetter = mostCommonLetter;
-    return key;
+    person.mostCommonLetter = mostCommonLetter;
+    return person;
   });
-  return tableToModify;
+  return peopleWithMostCommonLetter;
 }
-
-console.log(addMostCommonLetter());
