@@ -90,3 +90,39 @@ function addAge() {
   });
   return peopleWithNickame;
 }
+
+function mostCommonChar(string) {
+  let counter = {};
+  let chars = string.toLowerCase().split("");
+  chars.forEach((char) => {
+    counter[char] = (counter[char] || 0) + 1;
+  });
+
+  let count = 0;
+  let mostCommonLetter = "";
+  for (const char in counter) {
+    if (counter[char] > count) {
+      count = counter[char];
+      mostCommonLetter = char;
+    } else if (counter[char] === count) {
+      if (char.charCodeAt() < mostCommonLetter.charCodeAt()) {
+        count = counter[char];
+        mostCommonLetter = char;
+      }
+    }
+  }
+  console.log(counter);
+  return { letter: mostCommonLetter, count: count };
+}
+
+function addMostCommonLetter() {
+  const tableToModify = addAge().map((key) => {
+    const allChars = key.firstName + key.lastName + key.nickname;
+    const mostCommonLetter = mostCommonChar(allChars);
+    key.mostCommonLetter = mostCommonLetter;
+    return key;
+  });
+  return tableToModify;
+}
+
+console.log(addMostCommonLetter());
